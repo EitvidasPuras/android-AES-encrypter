@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AESEncryptor</string>
+    <string name="password_hint">Password</string>
+    <string name="text_hint">Text</string>
+    <string name="encrypt_button_text">Encrypt</string>
+    <string name="decrypt_button_text">Decrypt</string>
+</resources>
