@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AESEncryptor</string>
+    <string name="app_name">AESEncrypter</string>
     <string name="password_hint">Password</string>
     <string name="text_hint">Text</string>
     <string name="encrypt_button_text">Encrypt</string>

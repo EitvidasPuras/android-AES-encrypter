@@ -19,7 +19,6 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
-
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +41,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        button_encrypt.setOnClickListener {
+        button_encrypt.setOnClickListener() {
             val text: String = edittext_text.text.toString()
             val pass: String = edittext_password.text.toString()
+            val toast: Toast
             if (text.isEmpty() or pass.isEmpty()) {
-                Toast.makeText(this, "Text fields cannot be empty", Toast.LENGTH_SHORT).show()
+                toast = Toast.makeText(this, "Text fields cannot be empty", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.BOTTOM, 0, 150)
+                toast.show()
             } else {
                 edittext_text.setText(encryptAES(text, pass))
             }
@@ -58,10 +60,13 @@ class MainActivity : AppCompatActivity() {
         button_decrypt.setOnClickListener {
             val text: String = edittext_text.text.toString()
             val pass: String = edittext_password.text.toString()
+            var toast: Toast = Toast.makeText(this, "placeholder", Toast.LENGTH_SHORT)
             if (text.isEmpty() or pass.isEmpty()) {
-                Toast.makeText(this, "Text fields cannot be empty", Toast.LENGTH_SHORT).show()
+                toast = Toast.makeText(this, "Text fields cannot be empty", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.BOTTOM, 0, 150)
+                toast.show()
             } else {
-                edittext_text.setText(decryptAES(text, pass))
+                edittext_text.setText(decryptAES(text, pass, toast))
             }
         }
 
@@ -121,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         return Base64.encodeToString(encodedPackage, Base64.DEFAULT)
     }
 
-    private fun decryptAES(encryptedText: String, password: String): String {
+    private fun decryptAES(encryptedText: String, password: String, toast: Toast): String {
         try {
             val buffer: ByteBuffer = ByteBuffer.wrap(Base64.decode(encryptedText, Base64.DEFAULT))
 
@@ -145,7 +150,10 @@ class MainActivity : AppCompatActivity() {
 
             return String(decryptedTextBytes)
         } catch (e: Exception) {
-            Toast.makeText(this, "An unexpected error occurred", Toast.LENGTH_SHORT).show()
+            var toastCopy = toast
+            toastCopy = Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT)
+            toastCopy.setGravity(Gravity.BOTTOM, 0, 150)
+            toastCopy.show()
             return encryptedText
         }
     }
