@@ -1,14 +1,14 @@
 package com.example.user.aesencryptor
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.app.AppCompatActivity
+import com.example.user.aesencryptor.databinding.ActivityMainBinding
 import java.nio.ByteBuffer
 import java.security.AlgorithmParameters
 import java.security.SecureRandom
@@ -21,52 +21,55 @@ import javax.crypto.spec.SecretKeySpec
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
                 WindowManager.LayoutParams.FLAG_SECURE)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         System.gc()
 
-        edittext_text.addTextChangedListener(object : TextWatcher {
+        binding.edittextText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.isNotEmpty()) {
-                    edittext_text.gravity = Gravity.START and Gravity.TOP
+                    binding.edittextText.gravity = Gravity.START and Gravity.TOP
                 } else {
-                    edittext_text.gravity = Gravity.CENTER
+                    binding.edittextText.gravity = Gravity.CENTER
                 }
             }
         })
 
-        button_encrypt.setOnClickListener() {
-            val text: String = edittext_text.text.toString()
-            val pass: String = edittext_password.text.toString()
+        binding.buttonEncrypt.setOnClickListener() {
+            val text: String = binding.edittextText.text.toString()
+            val pass: String = binding.edittextPassword.text.toString()
             val toast: Toast
             if (text.isEmpty() or pass.isEmpty()) {
                 toast = Toast.makeText(this, "Text fields cannot be empty", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.BOTTOM, 0, 150)
                 toast.show()
             } else {
-                edittext_text.setText(encryptAES(text, pass))
+                binding.edittextText.setText(encryptAES(text, pass))
             }
         }
 
         System.gc()
         System.gc()
 
-        button_decrypt.setOnClickListener {
-            val text: String = edittext_text.text.toString()
-            val pass: String = edittext_password.text.toString()
+        binding.buttonDecrypt.setOnClickListener {
+            val text: String = binding.edittextText.text.toString()
+            val pass: String = binding.edittextPassword.text.toString()
             var toast: Toast = Toast.makeText(this, "placeholder", Toast.LENGTH_SHORT)
             if (text.isEmpty() or pass.isEmpty()) {
                 toast = Toast.makeText(this, "Text fields cannot be empty", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.BOTTOM, 0, 150)
                 toast.show()
             } else {
-                edittext_text.setText(decryptAES(text, pass, toast))
+                binding.edittextText.setText(decryptAES(text, pass, toast))
             }
         }
 
